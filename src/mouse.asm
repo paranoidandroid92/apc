@@ -1,9 +1,13 @@
+[BITS 16]
+global initialize_mouse
+
+;############
 section .text
 
 initialize_mouse:
 	cli
 
-	mov di,[mouse_irq_offset]	;set handler address in IVT
+	mov di,[mouse_irq_offset] ; set handler in IVT, vector offset 0x2C
 	mov ax,mouse_irq_handler
 	mov [es:di],ax
 	inc di
@@ -80,6 +84,7 @@ read_end:
 	sti
 	iret
 
+;############
 section .data
 
 mouse_irq_offset dw 0x00B0

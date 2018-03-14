@@ -1,10 +1,13 @@
 [BITS 16]
 global  initialize_pic
 
-initialize_pic:
-	;INITIALIZE PIC
+;############
+section .text
+
+initialize_pic: 
 	cli
 	push ax
+
 	mov al,0x11	;ICW1
 	out 0x20,al
 	out 0xA0,al
@@ -22,6 +25,7 @@ initialize_pic:
 	mov al,0x01	;ICW4
 	out 0x21,al
 	out 0xA1,al
+	
 	pop ax
 	sti
 	ret
