@@ -6,7 +6,11 @@ section .text
 
 initialize_mouse:
 	cli
+	pusha
+	push es
 
+	mov ax,0
+	mov es,ax
 	mov di,[mouse_irq_offset] ; set handler in IVT, vector offset 0x2C
 	mov ax,mouse_irq_handler
 	mov [es:di],ax
@@ -46,13 +50,16 @@ initialize_mouse:
 	out 0x64,al	
 	in al,0x60	
 	mov bl,al
-	or bl,0x03	;enable mouse interrupt
-	and bl,0xCF ;enable mouse clock
+	or bl,0x02	;enable mouse interrupt
 	mov al,0x60
 	out 0x64,al	;write configuration byte
 	mov al,bl
 	out 0x60,al
 
+	in al,0x64
+
+	pop es
+	popa
 	sti
 	ret
 
@@ -74,11 +81,13 @@ read_end:
 	mov ax,0xb800
 	mov es,ax
 	mov di,[screen_kb]
-	mov ax, 0x4e45
+	mov ax, 0x4e46
 	mov [es:di],ax
 	add word [screen_kb],2
 	mov al,0x20
 	out 0x20,al
+	mov al,0x20
+	out 0xA0,al
 	pop es
 	popa
 	sti
@@ -88,3 +97,4 @@ read_end:
 section .data
 
 mouse_irq_offset dw 0x00B0
+screen_kb dw 0

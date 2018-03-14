@@ -2,6 +2,7 @@
 global pit_irq_handler
 global initialize_pit
 
+;############
 section .text
 initialize_pit:
 	cli
@@ -36,12 +37,12 @@ pit_irq_handler:
 	mov [counter],bl
 	cmp bl,0xFF
 	jne .pit_irq_ret
-	;mov ax,0xb800
-	;mov es,ax
-	;mov di,[screen_pos]
-	;mov ax, 0x4e45
-	;mov [es:di],ax
-	;add word [screen_pos],2
+	mov ax,0xb800
+	mov es,ax
+	mov di,[screen_pos]
+	mov ax, 0x4e45
+	mov [es:di],ax
+	add word [screen_pos],2
 .pit_irq_ret:	
 	mov al,0x20
 	out 0x20,al
@@ -52,6 +53,7 @@ pit_irq_handler:
 	popa
 	iret
 
+;############
 section .data
 counter db 0x00
 screen_pos dw 0x0000

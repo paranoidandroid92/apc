@@ -21,6 +21,7 @@ int c_code_entry() {
 	initialize_pit();
 	initialize_ps2();
 	initialize_keyboard();
+	initialize_mouse();
 	itoa(2147483648, test, 10);
 	print(test);
 	__asm__ volatile(/*"mov $0x13,%al\n\t"
@@ -52,6 +53,7 @@ int c_code_entry() {
 	                 "mov $198,%di\n\t"
 	                 "movb $0xAA,%es:(%di)\n\t"*/
 	    "end: \n\t"
+	    "in $0x64,%al\n\t"
 	    "jmp end\n\t");
 	return 0;
 }

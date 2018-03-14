@@ -25,7 +25,12 @@ initialize_pic:
 	mov al,0x01	;ICW4
 	out 0x21,al
 	out 0xA1,al
-	
+
+	mov al,0xF8 ;set Interrupt Mask Registers
+	out 0x21,al	;only pit,keyboard,mouse are enabled for now
+	mov al,0xEF
+	out 0xA1,al
+
 	pop ax
 	sti
 	ret
