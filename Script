@@ -1,34 +1,39 @@
 #!/usr/bin/env bash
-cd /home/potato/Desktop/apc/src
-nasm -f elf boot.asm -o /home/potato/Desktop/apc/obj/boot.o
+folder="/home/potato/Desktop/apc"
+objFolder="$folder/obj"
+srcFolder="$folder/src"
+binFolder="$folder/bin"
+bochsFolder="/home/potato/Desktop/Bochs Folder"
+cd "$srcFolder"
+nasm -f elf boot.asm -o "$objFolder/boot.o"
 echo boot.asm compiled
-nasm -f elf pic.asm -o /home/potato/Desktop/apc/obj/pic.o
+nasm -f elf pic.asm -o "$objFolder/pic.o"
 echo pic.asm compiled
-nasm -f elf pit.asm -o /home/potato/Desktop/apc/obj/pit.o
+nasm -f elf pit.asm -o "$objFolder/pit.o"
 echo pit.asm compiled
-nasm -f elf ps2.asm -o /home/potato/Desktop/apc/obj/ps2.o
+nasm -f elf ps2.asm -o "$objFolder/ps2.o"
 echo ps2.asm compiled
-nasm -f elf keyboard.asm -o /home/potato/Desktop/apc/obj/kb.o
+nasm -f elf keyboard.asm -o "$objFolder/kb.o"
 echo keyboard.asm compiled
-gcc -Wall -c -m16 -nostdlib main.c -o /home/potato/Desktop/apc/obj/main.o
+gcc -Wall -c -m16 -nostdlib main.c -o "$objFolder/main.o"
 echo main.c compiled
-gcc -Wall -c -m16 -nostdlib screenManager.c -o /home/potato/Desktop/apc/obj/screenManager.o
+gcc -Wall -c -m16 -nostdlib screenManager.c -o "$objFolder/screenManager.o"
 echo screenManager.c compiled
-gcc -Wall -c -m16 -nostdlib string.c -o /home/potato/Desktop/apc/obj/string.o
+gcc -Wall -c -m16 -nostdlib string.c -o "$objFolder/string.o"
 echo string.c compiled
-gcc -Wall -c -m16 -nostdlib keyboard.c -o /home/potato/Desktop/apc/obj/keyboard.o
+gcc -Wall -c -m16 -nostdlib keyboard.c -o "$objFolder/keyboard.o"
 echo keyboard.c compiled
-cd /home/potato/Desktop/apc/obj
-gcc -Wall -T myLink.ld -m16 -nostdlib -ffreestanding boot.o main.o screenManager.o string.o pic.o pit.o ps2.o keyboard.o kb.o -o final.o 
+cd "$objFolder"
+gcc -Wall -T myLink.ld -m16 -nostdlib -ffreestanding boot.o main.o screenManager.o string.o pic.o pit.o ps2.o keyboard.o kb.o -o final.o
 echo linking boot.o,main.o,screnManager.o,string.o
-objcopy -j .text -I elf32-little -O binary final.o /home/potato/Desktop/apc/bin/text
+objcopy -j .text -I elf32-little -O binary final.o "$binFolder/text"
 echo text section of final.o created: text.bin
-objcopy -j .data -I elf32-little -O binary final.o /home/potato/Desktop/apc/bin/data
+objcopy -j .data -I elf32-little -O binary final.o "$binFolder/data"
 echo data section of final.o created: data.bin
 objdump -D -j .text -mi386 -Maddr16,data16,intel final.o
 echo data section of final.o
 objdump -j .data -w -s final.o
-cd /home/potato/Desktop/apc/bin
+cd "$binFolder"
 objdump -D -b binary -mi386 -Maddr16,data16,intel text
 hexdump -C data
 echo ---------------------
@@ -45,8 +50,8 @@ echo ---------------------
 echo dumping final
 echo ----------------------
 hexdump -C final
-sudo dd if=final of="/home/potato/Desktop/Bochs Folder/test.iso" bs=512 count=8
-sudo chmod u=rwx,g=rwx,o=rwx "/home/potato/Desktop/Bochs Folder/test.iso"
-cd "/home/potato/Desktop/Bochs Folder/"
+sudo dd if=final of="$bochsFolder/test.iso" bs=512 count=8
+sudo chmod u=rwx,g=rwx,o=rwx "$bochsFolder/test.iso"
+cd "$bochsFolder"
 bochs
 $SHELL
