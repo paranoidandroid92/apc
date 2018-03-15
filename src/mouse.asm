@@ -67,33 +67,6 @@ initialize_mouse:
 mouse_irq_handler:
 	call 0x0000:mouse_interrupt_service
 	iret
-	cli
-	pusha
-	push es
-chk_buff:
-	in al,0x64
-	and al,0x01
-	cmp al,0x01
-	je read_buff
-	jmp read_end
-read_buff:
-	in al,0x60
-	jmp chk_buff
-read_end:
-	mov ax,0xb800
-	mov es,ax
-	mov di,[screen_kb]
-	mov ax, 0x4e46
-	mov [es:di],ax
-	add word [screen_kb],2
-	mov al,0x20
-	out 0x20,al
-	mov al,0x20
-	out 0xA0,al
-	pop es
-	popa
-	sti
-	iret
 
 ;############
 section .data
