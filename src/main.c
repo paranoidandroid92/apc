@@ -1,28 +1,25 @@
-
+#include "stdlib.h"
 #include "screenManager.h"
 #include "pic.h"
 #include "pit.h"
 #include "ps2.h"
-#define MAX_CHAR 11
 
 char greeting[6] = {"Helle"};
 char greetings[6] = {"Helle"};
-char numbers[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 char test[11];
 
-void itoa(int, char*, int);
 int c_code_entry() {
 	screenManagerInit();
 	clearScreen();
 	print(greeting);
 	setTerminalColor(VGA_COLOR_BLUE, VGA_COLOR_WHITE);
-	print(greetings);
+	printAt(greetings,1,0);
 	initialize_pic();
 	initialize_pit();
 	initialize_ps2();
 	initialize_keyboard();
 	initialize_mouse();
-	itoa(2147483648, test, 10);
+	itoa(5555, test, 10);
 	print(test);
 	__asm__ volatile(/*"mov $0x13,%al\n\t"
 	                 "mov $0x00,%ah\n\t"
@@ -58,25 +55,7 @@ int c_code_entry() {
 	return 0;
 }
 
-void itoa(int number, char* str, int base) {
-	int count = 0, remainder, quotinent, i, temp;
 
-	do {
-		quotinent = number / base;
-		remainder = number % base;
-		str[count] = numbers[remainder];
-		number = quotinent;
-		count++;
-	} while (quotinent != 0);
-
-	str[count] = '\0';
-
-	for (i = 0; i < count / 2; i++) {
-		temp = str[i];
-		str[i] = str[count - 1 - i];
-		str[count - 1 - i] = temp;
-	}
-}
 
 
 

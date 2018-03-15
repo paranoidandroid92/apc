@@ -42,17 +42,40 @@ void print(char* message) {
 	for (int i = 0; i < str_size; i++) {
 		character = character & 0xFF00;
 		character = character | message[i];
-		__asm__ volatile (	"pusha\n\t"
-		                    "push %%es\n\t"
-		                    "mov $0xb800,%%cx\n\t"
-		                    "mov %%cx, %%es\n\t"
-		                    "mov %0, %%di\n\t"
-		                    "mov %1, %%es:(%%di)\n\t"
-		                    "pop %%es\n\t"
-		                    "popa\n\t"
-		                    :
-		                    : "r" (CURRENT_BUFFER_INDEX), "r" (character));
+		__asm__ volatile ("pusha\n\t"
+		                  "push %%es\n\t"
+		                  "mov $0xb800,%%cx\n\t"
+		                  "mov %%cx, %%es\n\t"
+		                  "mov %0, %%di\n\t"
+		                  "mov %1, %%es:(%%di)\n\t"
+		                  "pop %%es\n\t"
+		                  "popa\n\t"
+		                  :
+		                  : "r" (CURRENT_BUFFER_INDEX), "r" (character));
 		CURRENT_BUFFER_INDEX += 2;
+	}
+
+}
+
+void printAt(char* message, int x, int y) {
+	short index = (x * SCREEN_ROW_LIMIT * 2) + (y * 2);
+	int str_size = strlength(message);
+	short character = 0x0000;
+	character = ((character | TERMINAL_COLOR) << 8);
+	for (int i = 0; i < str_size; i++) {
+		character = character & 0xFF00;
+		character = character | message[i];
+		__asm__ volatile ("pusha\n\t"
+		                  "push %%es\n\t"
+		                  "mov $0xb800,%%cx\n\t"
+		                  "mov %%cx, %%es\n\t"
+		                  "mov %0, %%di\n\t"
+		                  "mov %1, %%es:(%%di)\n\t"
+		                  "pop %%es\n\t"
+		                  "popa\n\t"
+		                  :
+		                  : "r" (index), "r" (character));
+		index += 2;
 	}
 
 }
@@ -93,16 +116,16 @@ void setTerminalColor(byte backgroundColor, byte foregroundColor) {
 void clearScreen() {
 	short clear_char = (0x0000 | TERMINAL_COLOR) << 8;
 	for (short i = 0; i < (SCREEN_ROW_LIMIT * SCREEN_COLUMN_LIMIT * 2 - 1); i += 2) {
-		__asm__ volatile (	"pusha\n\t"
-		                    "push %%es\n\t"
-		                    "mov $0xb800,%%cx\n\t"
-		                    "mov %%cx, %%es\n\t"
-		                    "mov %0, %%di\n\t"
-		                    "mov %1, %%es:(%%di)\n\t"
-		                    "pop %%es\n\t"
-		                    "popa\n\t"
-		                    :
-		                    : "r" (i), "r" (clear_char));
+		__asm__ volatile ("pusha\n\t"
+		                  "push %%es\n\t"
+		                  "mov $0xb800,%%cx\n\t"
+		                  "mov %%cx, %%es\n\t"
+		                  "mov %0, %%di\n\t"
+		                  "mov %1, %%es:(%%di)\n\t"
+		                  "pop %%es\n\t"
+		                  "popa\n\t"
+		                  :
+		                  : "r" (i), "r" (clear_char));
 	}
 }
 

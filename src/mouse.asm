@@ -1,6 +1,6 @@
 [BITS 16]
 global initialize_mouse
-
+extern mouse_interrupt_service
 ;############
 section .text
 
@@ -65,6 +65,8 @@ initialize_mouse:
 
 
 mouse_irq_handler:
+	call 0x0000:mouse_interrupt_service
+	iret
 	cli
 	pusha
 	push es

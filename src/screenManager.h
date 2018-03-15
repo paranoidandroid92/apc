@@ -1,12 +1,13 @@
 /*Comments*/
-#ifndef SCREENMANAGER_H_
-#define SCREENMANAGER_H_
+#ifndef _SCREENMANAGER_H
+#define _SCREENMANAGER_H
 /* Place to put all of my definitions etc. */
 
 typedef char byte;
 
 extern void screenManagerInit();
 extern void print(char* message);
+extern void printAt(char* message, int x, int y);
 extern void setBackgroundColor(byte backgroundColor);
 extern void setForegroundColor(byte foregroundColor);
 extern void setTerminalColor(byte backgroundColor, byte foregroundColor);

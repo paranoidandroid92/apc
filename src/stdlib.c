@@ -1,17 +1,23 @@
 #define MAX_CHAR 11
-char numbers[10] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
-int number[MAX_CHAR];
-int* itoa(int num) {
+
+char numbers[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+
+void itoa(int number, char* str, int base) {
 	int count = 0, remainder, quotinent, i, temp;
 
 	do {
-		quotinent = num / 10;
-		remainder = num % 10;
-		number[count] = remainder;
-		num = quotinent;
+		quotinent = number / base;
+		remainder = number % base;
+		str[count] = numbers[remainder];
+		number = quotinent;
 		count++;
 	} while (quotinent != 0);
-	number[count] = '\0';
 
-	return number;
+	str[count] = '\0';
+
+	for (i = 0; i < count / 2; i++) {
+		temp = str[i];
+		str[i] = str[count - 1 - i];
+		str[count - 1 - i] = temp;
+	}
 }

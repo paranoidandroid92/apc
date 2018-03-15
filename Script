@@ -15,8 +15,10 @@ nasm -f elf ps2.asm -o "$objFolder/ps2.o"
 echo ps2.asm compiled
 nasm -f elf keyboard.asm -o "$objFolder/kb.o"
 echo keyboard.asm compiled
-nasm -f elf mouse.asm -o "$objFolder/mouse.o"
+nasm -f elf mouse.asm -o "$objFolder/mouseASM.o"
 echo mouse.asm compiled
+gcc -Wall -c -m16 -nostdlib stdlib.c -o "$objFolder/stdlib.o"
+echo stdlib.c compiled
 gcc -Wall -c -m16 -nostdlib main.c -o "$objFolder/main.o"
 echo main.c compiled
 gcc -Wall -c -m16 -nostdlib screenManager.c -o "$objFolder/screenManager.o"
@@ -25,8 +27,10 @@ gcc -Wall -c -m16 -nostdlib string.c -o "$objFolder/string.o"
 echo string.c compiled
 gcc -Wall -c -m16 -nostdlib keyboard.c -o "$objFolder/keyboard.o"
 echo keyboard.c compiled
+gcc -Wall -c -m16 -nostdlib mouse.c -o "$objFolder/mouse.o"
+echo mouse.c compiled
 cd "$objFolder"
-gcc -Wall -T myLink.ld -m16 -nostdlib -ffreestanding boot.o main.o screenManager.o string.o pic.o pit.o ps2.o keyboard.o kb.o mouse.o -o final.o
+gcc -Wall -T myLink.ld -m16 -nostdlib -ffreestanding boot.o main.o screenManager.o string.o pic.o pit.o ps2.o keyboard.o kb.o mouse.o mouseASM.o stdlib.o -o final.o
 echo linking boot.o,main.o,screnManager.o,string.o
 objcopy -j .text -I elf32-little -O binary final.o "$binFolder/text"
 echo text section of final.o created: text.bin
@@ -41,7 +45,7 @@ hexdump -C data
 echo ---------------------
 echo padding data and text bin files
 echo ----------------------
-truncate -s 4096 text
+truncate -s 4608 text
 truncate -s 512 data
 objdump -D -b binary -mi386 -Maddr16,data16,intel text
 hexdump -C data
@@ -52,7 +56,7 @@ echo ---------------------
 echo dumping final
 echo ----------------------
 hexdump -C final
-sudo dd if=final of="$bochsFolder/test.iso" bs=512 count=9
+sudo dd if=final of="$bochsFolder/test.iso" bs=512 count=10
 sudo chmod u=rwx,g=rwx,o=rwx "$bochsFolder/test.iso"
 cd "$bochsFolder"
 bochs

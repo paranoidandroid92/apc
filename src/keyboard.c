@@ -53,11 +53,6 @@ void keyboard_interrupt_service(){
 			 "pop %ax\n\t"
 			 "sti\n\t");
 }
-
-void hueheme(){
-	__asm__ volatile("push %es\n\t"
-			 "pop %es\n\t");
-}
  
 unsigned char getKeyCode(unsigned char scanCode){
 	switch(scanCode){

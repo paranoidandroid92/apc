@@ -12,7 +12,7 @@ initialize_keyboard:
 
 	mov ax,0
 	mov es,ax
-	mov di,[kb_irq_offset] ; set handler in IVT
+	mov di,[kb_irq_offset] ; set handler in IVT, vector offset 0x21
 	mov ax,kb_irq_handler
 	mov [es:di],ax
 	inc di
