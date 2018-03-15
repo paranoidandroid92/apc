@@ -129,4 +129,34 @@ void clearScreen() {
 	}
 }
 
+void blink(byte x, byte y) {
+	short index = (x * SCREEN_ROW_LIMIT * 2) + (y * 2);
+	__asm__ volatile("pusha\n\t"
+					 "push %%es\n\t"
+					 "mov $0xb800,%%ax\n\t"
+					 "mov %%ax,%%es\n\t"
+					 "mov %0, %%di\n\t"
+					 "mov %%es:(%%di), %%bx\n\t"
+					 "or $0x80,%%bh\n\t"
+					 "mov %%bx,%%es:(%%di)\n\t"
+					 "pop %%es\n\t"
+					 "popa\n\t"
+					 :
+					 : "m" (index));
+}
 
+void unblink(byte x, byte y) {
+	short index = (x * SCREEN_ROW_LIMIT * 2) + (y * 2);
+	__asm__ volatile("pusha\n\t"
+					 "push %%es\n\t"
+					 "mov $0xb800,%%ax\n\t"
+					 "mov %%ax,%%es\n\t"
+					 "mov %0, %%di\n\t"
+					 "mov %%es:(%%di), %%bx\n\t"
+					 "and $0x7F,%%bh\n\t"
+					 "mov %%bx,%%es:(%%di)\n\t"
+					 "pop %%es\n\t"
+					 "popa\n\t"
+					 :
+					 : "m" (index));
+}
