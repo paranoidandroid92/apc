@@ -38,25 +38,25 @@ objcopy -j .data -I elf32-little -O binary final.o "$binFolder/data"
 echo data section of final.o created: data.bin
 objdump -D -j .text -mi386 -Maddr16,data16,intel final.o
 echo data section of final.o
-objdump -j .data -w -s final.o
+#objdump -j .data -w -s final.o
 cd "$binFolder"
-objdump -D -b binary -mi386 -Maddr16,data16,intel text
+#objdump -D -b binary -mi386 -Maddr16,data16,intel text
 hexdump -C data
 echo ---------------------
 echo padding data and text bin files
 echo ----------------------
-truncate -s 4608 text
+truncate -s 5120 text
 truncate -s 512 data
-objdump -D -b binary -mi386 -Maddr16,data16,intel text
-hexdump -C data
+#objdump -D -b binary -mi386 -Maddr16,data16,intel text
+#hexdump -C data
 rm final
 cat text >> final
 cat data >> final
-echo ---------------------
-echo dumping final
-echo ----------------------
-hexdump -C final
-sudo dd if=final of="$bochsFolder/test.iso" bs=512 count=10
+#echo ---------------------
+#echo dumping final
+#echo ----------------------
+#hexdump -C final
+sudo dd if=final of="$bochsFolder/test.iso" bs=512 count=11
 sudo chmod u=rwx,g=rwx,o=rwx "$bochsFolder/test.iso"
 cd "$bochsFolder"
 bochs
