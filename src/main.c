@@ -4,7 +4,7 @@
 #include "pit.h"
 #include "ps2.h"
 
-char greeting[6] = {"Helle"};
+char greeting[6] = {"He le"};
 char greetings[6] = {"Helle"};
 char test[11];
 
@@ -19,8 +19,8 @@ int c_code_entry() {
 	initialize_ps2();
 	initialize_keyboard();
 	initialize_mouse();
-	itoa(5555, test, 10);
-	print(test);
+	itoa(-10, test, 10);
+	printAt(test,5,0);
 	__asm__ volatile(/*"mov $0x13,%al\n\t"
 	                 "mov $0x00,%ah\n\t"
 	                 "int $0x10\n\t"
