@@ -12,6 +12,8 @@ extern void setBackgroundColor(byte backgroundColor);
 extern void setForegroundColor(byte foregroundColor);
 extern void setTerminalColor(byte backgroundColor, byte foregroundColor);
 extern void clearScreen();
+extern void blink(byte x, byte y);
+extern void unblink(byte x, byte y);
 
 extern const byte VGA_COLOR_BLACK;
 extern const byte VGA_COLOR_BLUE;
