@@ -40,11 +40,11 @@ _start:
 
 
 code_load_addr dw 0x07e0
-code_sector_size db 0x08
+code_sector_size db 0x09
 code_sector_position db 0x02
 data_load_addr dw 0x2000
 data_sector_size db 0x01
-data_sector_position db 0x0A
+data_sector_position db 0x0B
 disk_drive_number db 0x00
 
 times 510-($-$$) db 0
